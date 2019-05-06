@@ -30,7 +30,7 @@ public:
         strcpy(customerName, ref.customerName);
     }
 
-    int GetAccountNum()
+    int const GetAccountNum()
     {
         return accountNum;
     }
