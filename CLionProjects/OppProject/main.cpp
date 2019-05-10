@@ -53,8 +53,8 @@ public:
     void ShowAccountInfo()
     {
         std::cout << "Account Number Is: " << accountNum << std::endl;
-        std::cout << "Current Balance Is: " << balance << std::endl;
         std::cout << "Customer Name is: " << customerName << std::endl;
+        std::cout << "Current Balance Is: " << balance << std::endl;
 
     }
     ~Account()
@@ -78,6 +78,13 @@ public:
     void DepositMoney(void);
     void WithdrawMoney(void);
     void DisplayAllAccount(void);
+    ~AccountHandler() // destructor
+    {
+        for(int i = 0; i < accountNumberTracker; i++)
+        {
+            delete accountArray[i];
+        }
+    }
 };
 
 
