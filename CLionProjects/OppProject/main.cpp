@@ -1,22 +1,18 @@
 #include <iostream>
 
 
-const int NAME_MAX_LEN = 10;
+const int NAME_MAX_LEN = 10; // maximum size of Customer Name
 
-void DisplayMenu(void);
-void OpenAccount(void);
-void DepositMoney(void);
-void WithdrawMoney(void);
-void DisplayAllAccount(void);
+
 
 class Account{
 
 private:
     int accountNum;
-    int balance;
+    double balance;
     char* customerName;
 public:
-    Account(int accountNum, int balance, char* cusName) //constructor
+    Account(int accountNum, double balance, char* cusName) //constructor
     {
         this->accountNum = accountNum;
         this->balance = balance;
@@ -35,14 +31,14 @@ public:
         return accountNum;
     }
 
-    int Deposit(int money)
+    double Deposit(double money)
     {
         balance += money;
         std::cout << "New Balance is: " << balance << std::endl;
         return balance;
     }
 
-    int Withdraw(int money)
+    double Withdraw(double money)
     {
         if (balance < money)
         {
@@ -67,15 +63,32 @@ public:
     }
 };
 
-Account *accountArray[100]; // account array pointing to Account class
-int accountNumberTracker = 0; // track numbers of customer accounts
+
+class AccountHandler // deal with data pertaining to Account Activities
+{
+private:
+    Account *accountArray[100]; // account array pointing to Account class
+    int accountNumberTracker; // track numbers of customer accounts
+public:
+    AccountHandler():accountNumberTracker(0) // constructor
+    {
+    }
+    void DisplayMenu(void);
+    void OpenAccount(void);
+    void DepositMoney(void);
+    void WithdrawMoney(void);
+    void DisplayAllAccount(void);
+};
+
 
 int main()
 {
 
+    AccountHandler teller;
+
     while(true)
     {
-        DisplayMenu();
+        teller.DisplayMenu();
 
         int user_input;
         std::cout << "Please Select Options:"; std::cin >> user_input;
@@ -83,13 +96,13 @@ int main()
 
         switch(user_input)
         {
-            case 1: OpenAccount();
+            case 1: teller.OpenAccount();
                 break;
-            case 2: DepositMoney();
+            case 2: teller.DepositMoney();
                 break;
-            case 3: WithdrawMoney();
+            case 3: teller.WithdrawMoney();
                 break;
-            case 4: DisplayAllAccount();
+            case 4: teller.DisplayAllAccount();
                 break;
             case 5: return 0; // Terminate the program
                 break;
@@ -97,11 +110,11 @@ int main()
                 std::cout << "Invalid Option" << std::endl;
         }
     }
-
     return 0;
 }
 
-void DisplayMenu(void)
+
+void AccountHandler::DisplayMenu(void)
 {
     std::cout << "----- Menu -----" << std::endl;
     std::cout << "1. Open Account" << std::endl;
@@ -113,7 +126,7 @@ void DisplayMenu(void)
 }
 
 
-void OpenAccount(void)
+void AccountHandler::OpenAccount(void)
 {
     int id = 0;
     int depositedMoney = 0;
@@ -128,7 +141,7 @@ void OpenAccount(void)
 }
 
 
-void DepositMoney(void)
+void AccountHandler::DepositMoney(void)
 {
     int deposit_money = 0;
     int account_id = 0;
@@ -146,31 +159,31 @@ void DepositMoney(void)
             return;
         }
     }
-    std::cout << "Invaid account ID" << std::endl;
+    std::cout << "Invalid Account Number" << std::endl;
 }
 
-void WithdrawMoney(void)
+void AccountHandler::WithdrawMoney(void)
 {
     int withdraw_money = 0;
     int account_id = 0;
-    std::cout << "[Withdrawl]" << std::endl;
+    std::cout << "[Withdrawal]" << std::endl;
     std::cout << "Enter Account Number: "; std::cin >> account_id;
-    std::cout << "Enter Withdrawl Amount: "; std::cin >> withdraw_money;
+    std::cout << "Enter Withdrawal Amount: "; std::cin >> withdraw_money;
 
     for(int i = 0;i < accountNumberTracker; i++)
     {
         if(accountArray[i] -> GetAccountNum() == account_id)
         {
             accountArray[i] -> Withdraw(withdraw_money);
-            std::cout << "Withdrawl Succeeded" << std::endl;
+            std::cout << "Withdrawal Succeeded" << std::endl;
             std::cout << std::endl;
             return;
         }
     }
-    std::cout << "Invaid account ID" << std::endl;
+    std::cout << "Invalid Account Number" << std::endl;
 }
 
-void DisplayAllAccount(void)
+void AccountHandler::DisplayAllAccount(void)
 {
     for (int i = 0; i < accountNumberTracker; i++) {
         accountArray[i] ->ShowAccountInfo();
